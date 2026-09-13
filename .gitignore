@@ -1,7 +1,28 @@
+# --- Secrets (never commit) ---
 .env
+.env.*
+!env.local.example
+*.pem                 # EC2 SSH key pair
+*.key
+*.crt
+.aws/
+
+# --- Python ---
 .venv/
 __pycache__/
 *.pyc
-*.pem
-.pytest_cache/
+*.egg-info/
 dist/
+build/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# --- Docker / local data ---
+*.log
