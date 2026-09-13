@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests (moto-mocked DynamoDB, no AWS needed)
+        run: uv run pytest -q
+
+      - name: Build Docker image
+        run: docker build -t incident-memory -f deploy/Dockerfile .

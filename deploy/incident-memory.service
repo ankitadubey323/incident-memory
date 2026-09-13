@@ -1,0 +1,23 @@
+# /etc/systemd/system/incident-memory.service
+#
+# Keeps the Docker container running across reboots.
+#   sudo cp deploy/incident-memory.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now incident-memory
+#
+# Assumes the container was created once with:
+#   docker run -d --name incident-memory --restart unless-stopped \
+#     -p 127.0.0.1:8080:8080 incident-memory
+
+[Unit]
+Description=Incident Memory MCP server (Docker)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+RestartSec=5
+ExecStart=/usr/bin/docker start -a incident-memory
+ExecStop=/usr/bin/docker stop incident-memory
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,31 @@
+# Local development stack — no AWS account or credentials needed.
+#   docker-compose -f deploy/docker-compose.local.yml up -d
+#
+#   DynamoDB Local  → http://localhost:8002   (boto3 endpoint_url; host port 8000 was already in use)
+#   dynamodb-admin  → http://localhost:8003   (browser UI to inspect tables/items)
+services:
+  dynamodb:
+    image: amazon/dynamodb-local:latest
+    container_name: incident-memory-dynamodb
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data"
+    ports:
+      - "8002:8000"
+    volumes:
+      - ddb-data:/home/dynamodblocal/data
+    user: root            # lets the container write to the named volume
+
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin:latest
+    container_name: incident-memory-dynamodb-admin
+    environment:
+      DYNAMO_ENDPOINT: http://dynamodb:8000
+      AWS_REGION: eu-central-1
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+    ports:
+      - "8003:8001"
+    depends_on:
+      - dynamodb
+
+volumes:
+  ddb-data:

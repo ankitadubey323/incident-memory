@@ -1,0 +1,30 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "IncidentMemoryTableAccess",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:Query",
+        "dynamodb:DescribeTable"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:eu-central-1:ACCOUNT_ID:table/incident_memory",
+        "arn:aws:dynamodb:eu-central-1:ACCOUNT_ID:table/incident_memory/index/GSI1"
+      ]
+    },
+    {
+      "Sid": "CloudWatchLogsForDockerAwslogsDriver",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:eu-central-1:ACCOUNT_ID:log-group:/incident-memory:*"
+    }
+  ]
+}
